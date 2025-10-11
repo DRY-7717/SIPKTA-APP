@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="order-1 w-full mb-4 box-hero-section2 lg:w-1/2 sm:w-full sm:mb-4 lg:order-2 sm:order-1">
-                <img src="/img/img-hero.png" class="lg:h-[450px] w-full" alt="" />
+                <img src="/img/img-hero.png" class="lg:h-auto w-full " alt="" />
             </div>
         </div>
     </div>

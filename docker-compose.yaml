@@ -1,0 +1,75 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sipkta
+    container_name: app_sipkta
+    restart: unless-stopped
+    tty: true
+    environment:
+      - DB_HOST=db
+      - DB_PORT=db:3308
+      - DB_DATABASE=db_sipkta
+      - DB_USERNAME=dry7717
+      - DB_PASSWORD=bimaarya123
+    working_dir: /var/www/sipkta
+    volumes:
+      - .:/var/www/sipkta
+      - ./storage/php.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - mariadb_sipkta_network
+    ports:
+      - "5173:5173"
+    depends_on:
+      - db
+
+  webserver:
+    image: nginx:alpine
+    container_name: nginx_sipkta
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/sipkta
+      - ./storage/:/etc/nginx/conf.d/
+    networks:
+      - mariadb_sipkta_network
+    depends_on:
+      - app
+
+  db:
+    image: mariadb
+    container_name: mariadb_sipkta
+    environment:
+      - MYSQL_ROOT_PASSWORD=bimaarya123
+      - MYSQL_USER=dry7717
+      - MYSQL_PASSWORD=bimaarya123
+      - MYSQL_DATABASE=db_sipkta
+    ports:
+      - "3308:3306"
+    volumes:
+      - mariadb_dian_jaya_volume:/var/lib/mysql
+    networks:
+      - mariadb_sipkta_network
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: pma_sipkta
+    restart: always
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=dry7717
+      - PMA_PASSWORD=bimaarya123
+      - PMA_PORT=db:3308
+    ports:
+      - 8888:80
+    networks:
+      - mariadb_sipkta_network
+
+volumes:
+  mariadb_dian_jaya_volume:
+
+networks:
+  mariadb_sipkta_network:
+    driver: bridge
